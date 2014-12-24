@@ -1,0 +1,40 @@
+From fc6ce43a53bfdbc2177d183c13d772905873f03b Mon Sep 17 00:00:00 2001
+From: simapple <simapple@live.com>
+Date: Wed, 24 Dec 2014 17:01:31 +0800
+Subject: [PATCH] ok
+
+---
+ jkb_agent/jkbAgent.py          | 2 ++
+ jkb_agent/plugin/SnmpPlugin.py | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/jkb_agent/jkbAgent.py b/jkb_agent/jkbAgent.py
+index a957ed9..8dd7e84 100644
+--- a/jkb_agent/jkbAgent.py
++++ b/jkb_agent/jkbAgent.py
+@@ -232,6 +232,8 @@ class AgentProcess(threading.Thread):
+         os._exit(0)
+     
+     def initPlug(self,plug):
++        if plug['pluginFileName'] == 'SnmpPlugin':#关闭自动更新，因为要修改插件文件被更新覆盖还原就无效了
++            return None
+         try:
+             if os.path.exists('plugin/'+plug['pluginFileName']+'.py'):
+                 md = jkbLib.getMD5('plugin/'+plug['pluginFileName']+'.py')
+diff --git a/jkb_agent/plugin/SnmpPlugin.py b/jkb_agent/plugin/SnmpPlugin.py
+index 645d910..f09b08b 100644
+--- a/jkb_agent/plugin/SnmpPlugin.py
++++ b/jkb_agent/plugin/SnmpPlugin.py
+@@ -95,7 +95,8 @@ class SnmpPlugin(plugins.plugin):
+                    self.taskConf['snmp_ip'],':'+self.taskConf['snmp_port'],' ',oid)
+             self.cmd = ''.join(arr)
+         else :
+-            arr = (self.snmpwalk,' -v 2c -c ', self.taskConf['snmp_community'],' ',
++            #新增 -t 参数 暂时为 180 可以更具实际情况增加或减少 下一步计划添加为 self.taskConf['snmp_timeout']
++            arr = (self.snmpwalk,' -v 2c -t 180 -c ', self.taskConf['snmp_community'],' ',
+                    self.taskConf['snmp_ip'],':'+self.taskConf['snmp_port'],' ',oid)
+             self.cmd = ''.join(arr)
+             
+-- 
+1.9.4.msysgit.0
+
