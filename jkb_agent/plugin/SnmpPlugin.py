@@ -95,7 +95,8 @@ class SnmpPlugin(plugins.plugin):
                    self.taskConf['snmp_ip'],':'+self.taskConf['snmp_port'],' ',oid)
             self.cmd = ''.join(arr)
         else :
-            arr = (self.snmpwalk,' -v 2c -c ', self.taskConf['snmp_community'],' ',
+            #新增 -t 参数 暂时为 180 可以更具实际情况增加或减少 下一步计划添加为 self.taskConf['snmp_timeout']
+            arr = (self.snmpwalk,' -v 2c -t 180 -c ', self.taskConf['snmp_community'],' ',
                    self.taskConf['snmp_ip'],':'+self.taskConf['snmp_port'],' ',oid)
             self.cmd = ''.join(arr)
             

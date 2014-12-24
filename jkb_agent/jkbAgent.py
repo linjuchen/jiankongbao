@@ -232,6 +232,8 @@ class AgentProcess(threading.Thread):
         os._exit(0)
     
     def initPlug(self,plug):
+        if plug['pluginFileName'] == 'SnmpPlugin':#关闭自动更新，因为要修改插件文件被更新覆盖还原就无效了
+            return None
         try:
             if os.path.exists('plugin/'+plug['pluginFileName']+'.py'):
                 md = jkbLib.getMD5('plugin/'+plug['pluginFileName']+'.py')
